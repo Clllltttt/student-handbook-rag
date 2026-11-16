@@ -1,0 +1,4 @@
+-r step3_embedding/requirements.txt
+-r step6_reranking/requirements.txt
+-r step7_generation/requirements.txt
+-r step9_web_app/requirements.txt

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="基于《东华大学研究生手册（2023年版）》的本地知识问答系统" />
+    <title>研知 · 学生手册智能问答</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23a3372b'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-size='32' fill='white'%3E研%3C/text%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body>
+    <div class="paper-noise" aria-hidden="true"></div>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="返回首页">
+        <span class="brand-mark">研</span>
+        <span>
+          <strong>研知</strong>
+          <small>GRADUATE HANDBOOK</small>
+        </span>
+      </a>
+      <div class="status" id="status" aria-live="polite">
+        <span class="status-dot"></span>
+        <span>本地知识库已连接</span>
+      </div>
+    </header>
+
+    <main class="shell">
+      <section class="intro">
+        <p class="eyebrow">东华大学 · 2023 年版</p>
+        <h1>关于研究生手册，<br /><em>有问，必有据。</em></h1>
+        <p class="lede">从 30 份规章制度中检索答案。每个结论都能回到手册原文和具体页码。</p>
+      </section>
+
+      <section class="workspace" aria-label="手册问答">
+        <div class="conversation">
+          <div class="empty-state" id="emptyState">
+            <div class="seal" aria-hidden="true">知</div>
+            <h2>从一个具体问题开始</h2>
+            <p>可以询问学籍、奖助、培养、住宿、安全或违纪处理等内容。</p>
+            <div class="suggestions" aria-label="示例问题">
+              <button type="button" class="suggestion">研究生最长可以读几年？</button>
+              <button type="button" class="suggestion">国家奖学金的奖励标准是多少？</button>
+              <button type="button" class="suggestion">宿舍可以使用哪些电器？</button>
+            </div>
+          </div>
+
+          <article class="answer-card" id="answerCard" hidden>
+            <div class="answer-meta">
+              <span class="answer-label">手册回答</span>
+              <span id="answerTime"></span>
+            </div>
+            <h2 id="questionEcho"></h2>
+            <div class="answer-copy" id="answerCopy"></div>
+            <div class="answer-foot">
+              <span id="modelName"></span>
+              <button type="button" class="text-button" id="copyAnswer">复制回答</button>
+            </div>
+          </article>
+
+          <div class="loading-card" id="loadingCard" hidden aria-live="polite">
+            <div class="search-lines" aria-hidden="true"><i></i><i></i><i></i></div>
+            <div>
+              <strong>正在查阅手册</strong>
+              <p id="loadingText">检索相关制度与条款…</p>
+            </div>
+          </div>
+
+          <div class="error-card" id="errorCard" hidden role="alert">
+            <strong>没有完成这次查询</strong>
+            <p id="errorText"></p>
+          </div>
+        </div>
+
+        <aside class="sources-panel" id="sourcesPanel">
+          <div class="panel-heading">
+            <span>引用依据</span>
+            <small id="sourceCount">等待提问</small>
+          </div>
+          <div class="source-placeholder" id="sourcePlaceholder">
+            <span>01</span>
+            <p>回答后，这里会显示引用的制度、页码和原文片段。</p>
+          </div>
+          <div class="source-list" id="sourceList"></div>
+        </aside>
+      </section>
+
+      <form class="question-bar" id="questionForm">
+        <label class="sr-only" for="questionInput">输入关于学生手册的问题</label>
+        <textarea id="questionInput" rows="1" maxlength="500" placeholder="输入你想了解的手册问题…" required></textarea>
+        <button type="submit" id="askButton">
+          <span>查阅手册</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </button>
+      </form>
+      <p class="privacy-note">答案由本地 RAG 系统生成 · 请以学校最新规定为准</p>
+    </main>
+
+    <template id="sourceTemplate">
+      <article class="source-card">
+        <div class="source-topline">
+          <span class="source-index"></span>
+          <span class="source-page"></span>
+        </div>
+        <h3 class="source-title"></h3>
+        <p class="source-content"></p>
+        <a class="source-link" target="_blank" rel="noopener">查看 PDF 原页 <span>↗</span></a>
+      </article>
+    </template>
+
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+  </body>
+</html>
